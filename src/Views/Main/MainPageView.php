@@ -43,8 +43,12 @@ class MainPageView
             <table class="scanned-dirs form-table d-none">
                 <thead>
                     <tr>
+                        <th><?php esc_html_e('Filename', 'dup-challenge'); ?></th>
                         <th><?php esc_html_e('Path', 'dup-challenge'); ?></th>
+                        <th><?php esc_html_e('Type', 'dup-challenge'); ?></th>
+                        <th><?php esc_html_e('Extension', 'dup-challenge'); ?></th>
                         <th><?php esc_html_e('Size', 'dup-challenge'); ?></th>
+                        <th><?php esc_html_e('Permissions', 'dup-challenge'); ?></th>
                         <th><?php esc_html_e('Nodes', 'dup-challenge'); ?></th>
                     </tr>
                 </thead>

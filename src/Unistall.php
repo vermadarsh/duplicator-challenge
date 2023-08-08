@@ -48,9 +48,9 @@ class Unistall
     public static function dupRegisterDeactivationHookCallback()
     {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'dup_site_scanner_log';
+        $tableName = $wpdb->prefix . 'dup_site_scanner_log';
 
         // Drop the table.
-        $wpdb->query("DROP TABLE IF EXISTS `{$table_name}`");
+        $wpdb->query("DROP TABLE IF EXISTS `{$tableName}`");
     }
 }

@@ -11,7 +11,7 @@
  *
  * Plugin Name: Duplicator Challenge
  * Plugin URI: https://github.com/vermadarsh/duplicator-challenge/
- * Description: Duplicator Challenge
+ * Description: Duplication plugin challenge provided by Awesome Motive. This plugin scans the WordPress installation, shows the log in the admin screen and updated the database accordingly.
  * Version: 1.0.0
  * Requires at least: 5.2
  * Tested up to: 6.2.2

@@ -3,11 +3,10 @@ jQuery(document).ready(
         'use strict';
 
         // Localized variables.
-        var ajaxurl    = DuplicatorAdminJsObj.ajaxurl;
-        var scan_in_progress  = DuplicatorAdminJsObj.scan_in_progress;
-        var scan_completed  = DuplicatorAdminJsObj.scan_completed;
-    
-        var ajax_nonce = DuplicatorAdminJsObj.ajax_nonce;
+        var ajaxurl        = DuplicatorAdminJsObj.ajaxurl;
+        var scanInProgress = DuplicatorAdminJsObj.scan_in_progress;
+        var scanCompleted  = DuplicatorAdminJsObj.scan_completed;
+        var ajaxNonce      = DuplicatorAdminJsObj.ajax_nonce;
 
         /**
          * Scan the website.
@@ -15,8 +14,8 @@ jQuery(document).ready(
         $(document).on(
             'click', '.dup-scan-site', function (evt) {
                 evt.preventDefault();
-                var page = 1, files_per_iteration = 200, last_scanned_index = 0, this_button = $(this);
-                scanSite(page, files_per_iteration, last_scanned_index, this_button);
+                var page = 1, filesPerIteraton = 500, lastScannedIndex = 0;
+                scanSite(page, filesPerIteraton, lastScannedIndex);
 
                 // Hide the table and the progress text.
                 if (! $('table.scanned-dirs.form-table').hasClass('d-none') ) {
@@ -28,15 +27,12 @@ jQuery(document).ready(
         /**
          * Scan the site. This is a self-iterated function.
          *
-         * @param {int} page Page.
-         * @param {int} files_per_iteration Number of files per iteration.
-         * @param {string} last_scanned_index Last scanned file.
-         * @param {*} this_button Scan button element.
+         * @param {int}    page Page.
+         * @param {int}    filesPerIteraton Number of files per iteration.
+         * @param {string} lastScannedIndex Last scanned file.
          */
-        function scanSite( page, files_per_iteration, last_scanned_index, this_button )
+        function scanSite( page, filesPerIteraton, lastScannedIndex )
         {
-              var button_text = this_button.text(); // Grab the original button text.
-
               // Send the AJAX to scan the main directories.
             $.ajax(
                 {
@@ -45,14 +41,14 @@ jQuery(document).ready(
                     type: 'POST',
                     data: {
                         action: 'scan_site',
-                        nonce: ajax_nonce,
+                        nonce: ajaxNonce,
                         page: page,
-                        files_per_iteration: files_per_iteration,
-                        last_scanned_index: last_scanned_index,
+                        filesPerIteraton: filesPerIteraton,
+                        lastScannedIndex: lastScannedIndex,
                     },
                     beforeSend: function () {
                               block_element($('.dup-scan-site')); // Block the button.
-                              $('.dup-scan-site').text(scan_in_progress); // Set the wait text on the button.
+                              $('.dup-scan-site').text(scanInProgress); // Set the wait text on the button.
                     },
                     success: function ( response ) {
                         // If the scanning is in progress.
@@ -63,7 +59,7 @@ jQuery(document).ready(
                             // Wait for a bit and resume the scan.
                             setTimeout(
                                 function () {
-                                    scanSite(++page, files_per_iteration, response.data.last_scanned_index);
+                                    scanSite(++page, filesPerIteraton, response.data.lastScannedIndex);
                                 }, 400 
                             );
                         }
@@ -71,22 +67,15 @@ jQuery(document).ready(
                         // If the scanning is completed.
                         if ('scan-complete' === response.data.code ) {
                             // Mark the progress text as completed.
-                            $('.scan-in-progress').text(scan_completed);
+                            $('.scan-in-progress').text(scanCompleted);
+                            unblock_element($('.dup-scan-site')); // Unblock the button.
+                            $('.dup-scan-site').text('Scan Site'); // Set the original text on the button.
                         }
                     },
                     error: function ( xhr ) {
                         console.warn('Error occured. Please try again. Status: ' + xhr.statusText + '. Text: ' + xhr.responseText);
                     },
                     complete: function () {
-                        // Scroll to the p tag where the waiting text is visible.
-                        $('html, body').animate(
-                            {
-                                scrollTop: $('.scan-in-progress').offset().top
-                            }, 3000 
-                        );
-
-                        unblock_element($('.dup-scan-site')); // Unblock the button.
-                        $('.dup-scan-site').text(button_text); // Set the original text on the button.
                     }
                 } 
             );

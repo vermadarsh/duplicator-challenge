@@ -48,14 +48,14 @@ class Install
     public static function dupRegisterActivationHookCallback()
     {
         global $wpdb;
-        $existing_tables          = ( ! empty($wpdb->tables) && is_array($wpdb->tables) ) ? $wpdb->tables : array();
-        $dup_site_scanner_log_tbl = 'dup_site_scanner_log';
+        $existingTables       = ( ! empty($wpdb->tables) && is_array($wpdb->tables) ) ? $wpdb->tables : array();
+        $dupSiteScannerLogTbl = 'dup_site_scanner_log';
 
         // Create the table for storing the site scan log.
-        if (! empty($existing_tables) && is_array($existing_tables) && ! in_array($yt_table_name, $existing_tables) ) {
-            $charset_collate          = $wpdb->get_charset_collate();
-            $dup_site_scanner_log_tbl = $wpdb->prefix . 'dup_site_scanner_log';
-            $sql              = "CREATE TABLE `$dup_site_scanner_log_tbl` (
+        if (! empty($existingTables) && is_array($existingTables) && ! in_array($yt_table_name, $existingTables) ) {
+            $charsetCollate       = $wpdb->get_charset_collate();
+            $dupSiteScannerLogTbl = $wpdb->prefix . 'dup_site_scanner_log';
+            $sql                  = "CREATE TABLE `$dupSiteScannerLogTbl` (
 				`id` int(255) NOT NULL AUTO_INCREMENT,
 				`filename` varchar(200) DEFAULT '' NOT NULL,
 				`path` longtext DEFAULT '' NOT NULL,
@@ -65,7 +65,7 @@ class Install
 				`file_permissions` varchar(200) DEFAULT '' NOT NULL,
 				`nodes_count` int(200) DEFAULT 0 NOT NULL,
 				PRIMARY KEY  ( id )
-			) {$charset_collate};";
+			) {$charsetCollate};";
             
             include_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);

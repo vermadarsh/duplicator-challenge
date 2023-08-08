@@ -88,9 +88,12 @@ class AdminPagesController extends AbstractController
             return;
         }
 
+        // Set the asset file suffix.
+        $suffix = ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ? '' : '.min';
+
         wp_enqueue_style(
             'duplicator-challenge-admin-styles',
-            DUP_CHALLENGE_URL . '/assets/css/admin.css',
+            DUP_CHALLENGE_URL . "/assets/css/admin{$suffix}.css",
             array(),
             DUP_CHALLENGE_VERSION
         );
